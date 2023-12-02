@@ -1,5 +1,4 @@
 const inputFull: string = await Deno.readTextFile(Deno.args[0]);
-type Game = { id: number; r: number; g: number; b: number };
 
 const input = inputFull
   .split("\n")
@@ -11,11 +10,6 @@ const input = inputFull
       g: Number(reveal.match(/(\d+)\s+green/)?.[1] ?? 0),
       b: Number(reveal.match(/(\d+)\s+blue/)?.[1] ?? 0),
     })),
-    // .reduce((prev, curr) => ({
-    //   r: prev.r + curr.r,
-    //   g: prev.g + curr.g,
-    //   b: prev.b + curr.b,
-    // })),
   }))
   .filter((game) =>
     !game.reveals.some((reveal) =>
