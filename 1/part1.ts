@@ -10,7 +10,7 @@ const lookup = {
   'seven': 7,
   'eight': 8,
   'nine': 9
-} as 
+}
 
 function getNum(char: string, i: number, line: string){
   let num = parseInt(char)
