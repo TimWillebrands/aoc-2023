@@ -21,11 +21,15 @@ const seeds = (inputFull
     .substring(0, inputFull.indexOf('\n'))
     .match(/\d+/g)
     ?.map(Number) ?? [])
+    .slice(18) // Le shortcut to see why im off-by-one
     .reduce((location, seedSeed, seedI, arr) => {
         if(seedI%2===0) 
-        for(let seed = seedSeed; seed < seedSeed+arr[seedI+1]; seed++){
-            var loc = almanac.reduce((value, route) => getRoute(route, value),seed)
-            location = loc < location ? loc : location
+        for(let seed = seedSeed; seed < seedSeed+arr[seedI+1]-1; seed++){
+            const loc = almanac.reduce((value, route) => getRoute(route, value),seed)
+            if(loc < location){
+                console.log('we have a new lowest!', loc, 'for seed:', seed, 'original seed:', seedSeed)
+                location = loc 
+            }
         }
         return location
     }, Number.MAX_SAFE_INTEGER)
