@@ -23,4 +23,4 @@ const seeds = (inputFull
     .map(seed => almanac.reduce((value, route) => getRoute(route, value),seed))
     .sort((a,b) => a-b)
 
-console.log(seeds);
+console.log(seeds[0]);

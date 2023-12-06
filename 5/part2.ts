@@ -17,20 +17,17 @@ const almanac = inputFull
         .filter(map => map.length > 0) as [number,number,number][]
     )
 
-const seeds2 = (inputFull
+const seeds = (inputFull
     .substring(0, inputFull.indexOf('\n'))
-    .match(/\d+/g)?.map(Number) ?? [])
-    .reduce((moarSeeds, seedSeed, seedI, arr) => {
+    .match(/\d+/g)
+    ?.map(Number) ?? [])
+    .reduce((location, seedSeed, seedI, arr) => {
         if(seedI%2===0) 
         for(let seed = seedSeed; seed < seedSeed+arr[seedI+1]; seed++){
-            moarSeeds.push(seed)
+            var loc = almanac.reduce((value, route) => getRoute(route, value),seed)
+            location = loc < location ? loc : location
         }
-        return moarSeeds
-    }, new Array<number>())
+        return location
+    }, Number.MAX_SAFE_INTEGER)
 
-
-// const seeds = seeds2
-//     .map(seed => almanac.reduce((value, route) => getRoute(route, value),seed))
-//     .sort((a,b) => a-b)
-
-console.log(seeds2);
+console.log(seeds);
