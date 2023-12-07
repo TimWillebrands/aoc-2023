@@ -2,7 +2,7 @@ const inputFull: string = await Deno.readTextFile(Deno.args[0])
     
 const games = inputFull
     .split('\n')
-    .map(line => Number(line.match(/\d+/g)?.join('')))
+    .map(line => line.match(/\d+/g)?.map(Number))
 
 const records = games[0]
     ?.map((time, i) => [time, games[1]![i]] as [number,number])
@@ -15,4 +15,4 @@ const records = games[0]
     })
     .reduce((prev, curr) => prev*curr)
 
-console.log(games)
+console.log(records)
