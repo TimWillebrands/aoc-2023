@@ -1,7 +1,7 @@
 const inputFull: string = await Deno.readTextFile(Deno.args[0]);
 const cards = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']
     .reverse()
-    .reduce((map, card, i) => map.set(card, i) ,new Map<string, number>())
+    .reduce((map, card, i) => map.set(card, i.toString(16)) ,new Map<string, string>())
     
 const stuff = inputFull
     .split('\n')
@@ -13,10 +13,10 @@ const stuff = inputFull
         bid: hand[1],
         score: (hand[2]![0] * 0x1000000) 
             + (((hand[2]?.[1]-1) * 0x100000)||0)
-            + parseInt(hand[0].map(card => Number(cards.get(card)).toString(16)).join(''), 16)
+            + parseInt(hand[0].map(card => cards.get(card)).join(''), 16)
         ,
         // hand: hand[0].join(''),
-        // bla: hand[0].map(card => Number(cards.get(card)).toString(16)).join('')
+        // bla: hand[0].map(card => cards.get(card)).join('')
     }))
     // .map(hand => ({...hand, scoreHex: '0x'+hand.score.toString(16)}))
     .sort((a,b) => a.score - b.score )
