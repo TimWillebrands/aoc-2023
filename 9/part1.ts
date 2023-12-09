@@ -3,14 +3,13 @@ const inputFull: string = await Deno.readTextFile(Deno.args[0]);
 function calcDiff(measurements: number[]){
     const diffs = new Array<number>();
     for(let i = 0; i < measurements.length-1; ++i){
-        diffs.push(measurements[i+1]-measurements[i])        
+        diffs.push(measurements[i+1]-measurements[i])
     }
     return diffs
 }
 
 function findNext(measurements: number[], last?: number){
-    const diffs = calcDiff(measurements)
-    console.log('l', last,'m', measurements, '\td', diffs, '\n')
+    const diffs = calcDiff(measurements)    
     
     if(last === undefined)
         return findNext(diffs, measurements[measurements.length-1])         
@@ -28,4 +27,3 @@ const sensor = inputFull
     .reduce((a,b) => a + b)
 
 console.log(sensor)
-// console.log(findNext(sensor[0]))
