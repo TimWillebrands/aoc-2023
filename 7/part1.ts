@@ -14,13 +14,8 @@ const stuff = inputFull
         score: (hand[2]![0] * 0x1000000) 
             + (((hand[2]?.[1]-1) * 0x100000)||0)
             + parseInt(hand[0].map(card => cards.get(card)).join(''), 16)
-        ,
-        // hand: hand[0].join(''),
-        // bla: hand[0].map(card => cards.get(card)).join('')
     }))
-    // .map(hand => ({...hand, scoreHex: '0x'+hand.score.toString(16)}))
     .sort((a,b) => a.score - b.score )
-    .map((hand, rank) => ({bid: hand.bid, rank: rank+1}))
-    .reduce((total, hand) => total + (hand.bid*hand.rank),0)
+    .reduce((total, hand, rank) => total + (hand.bid*(rank+1)),0)
 
 console.log(stuff)
