@@ -27,12 +27,16 @@ const grid = inputFull
 const sy = grid.findIndex(row => row.includes('S')),
     s = [grid.findIndex(row => row.includes('S')), grid[sy].findIndex(cell => cell === 'S')] as const;
 
+function isInSet(pt: Pt, set: Pt[]){
+    return set.findIndex(p2 => pt[0] === p2[0] && p2[1] === pt[1]) < 0
+}
+
 function dirs(pt: Pt, route: Pt[]) {
     return ([
         [pt[0] - 1, pt[1]], [pt[0] + 1, pt[1]],
         [pt[0], pt[1] - 1], [pt[0], pt[1] + 1]
     ] as const)
-    .filter(p => route.findIndex(p2 => p[0] === p2[0] && p2[1] === p[1]) < 0)
+    .filter(p => isInSet(p, route))
 }
 
 function cell(pt: Pt) {
@@ -54,16 +58,28 @@ function canNavigate(pt: Pt, d: Pt) {
     const symCurr = cell(pt)!, symDest = cell(d);
     if (symDest === null || symDest === '.') return false;
 
-    return symbols[symCurr]![dir(pt, d)].includes(symDest)
+    return symbols[symCurr]![dir(pt, d)].includes(symDest as never)
 }
 
-function next(src: Pt, route: Pt[]) {
-    const d = dirs(src, route).find(pt => canNavigate(src, pt))    
-    console.log(i++)
-    if(d === undefined) return route
+function findLoop(src: Pt) {
+    const route = new Array<Pt>()
 
-    route.push(d)
-    return next(d, route)
+    let d = dirs(src, route).find(pt => canNavigate(src, pt))    
+    
+    while(d !== undefined){
+        route.push(d)
+        d = dirs(d, route).find(pt => canNavigate(d, pt))    
+    }
+
+    return route
 }
 
-console.log('finished', next(s, [s]).length/2)
+const loop = findLoop(s)
+const bounds = loop.reduce((agg, pt) => ({
+    xmin: Math.min(agg.xmin, pt[0]),
+    xmax: Math.max(agg.xmax, pt[0]),
+    ymin: Math.min(agg.ymin, pt[1]),
+    ymax: Math.max(agg.ymax, pt[1]),
+}), {xmin: 999999, xmax:-9999999, ymin:9999999, ymax: -9999999})
+
+console.log('finished', loop.length/2, bounds)
