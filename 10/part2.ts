@@ -100,7 +100,24 @@ function castHorizon(p: Pt, dir: -1|1, line: Pt[]){
         (pt as [number, number])[0] += dir        
     }
     
-    return intersects
+    return intersects.length % 2 === 1
+}
+
+function castVertical(p: Pt, dir: -1|1, line: Pt[]){
+    const intersects = new Array<Pt>()
+    const pt = [...p] as const
+    
+    if(cell(pt) !== '.') return intersects
+        
+    
+    while(pt[1] >= bounds.ymin && pt[1] <= bounds.ymax){
+        if(hor.includes(cell(pt)!) && isInSet(pt, line)){
+            intersects.push([...pt])
+        }
+        (pt as [number, number])[1] += dir        
+    }
+    
+    return intersects.length % 2 === 1
 }
 
 let innies = 0
@@ -110,12 +127,14 @@ for(let y = bounds.ymin; y <= bounds.ymax; y++){
     const pt = [x,y] as const
     if(isInSet(pt, loop) || cell(pt) === 'S') continue;
     
-    const inters = castHorizon(pt, 1, loop)
-    const isEnclosed = inters.length % 2 === 1  
+    const isEnclosed = 
+        castHorizon(pt, 1, loop) 
+        && castVertical(pt, 1, loop)
+        && castHorizon(pt, -1, loop) 
+        && castVertical(pt, -1, loop)
 
-    isEnclosed && console.log(pt, isInSet(pt, loop), inters)
     isEnclosed && innies++
 }
 
 
-console.log('finished', loop.length/2, bounds, innies)
+console.log('finished', loop, bounds, innies)
